@@ -3,7 +3,9 @@ import java.util.Deque;
 
 /**
  * Perform any traversal.
- * Used here Level Order Traversal.
+ * <p>
+ * TC: O(n)
+ * SC: O(n)
  */
 public class SerializeDeserializeBinaryTree {
     public class TreeNode {
@@ -31,7 +33,7 @@ public class SerializeDeserializeBinaryTree {
      * @param root
      * @return
      */
-    public String serialize(TreeNode root) {
+    public String serialize_bfs(TreeNode root) {
         StringBuilder sb = new StringBuilder();
         if (root == null) {
             return sb.toString();
@@ -80,7 +82,7 @@ public class SerializeDeserializeBinaryTree {
      * @return
      */
     // Decodes your encoded data to tree.
-    public TreeNode deserialize(String data) {
+    public TreeNode deserialize_bfs(String data) {
         if (data.isEmpty()) {
             return null;
         }
@@ -106,5 +108,90 @@ public class SerializeDeserializeBinaryTree {
             }
         }
         return root;
+    }
+
+    public String serialize_pre(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        preOrder(root, sb);
+        return sb.toString();
+    }
+
+    private void preOrder(TreeNode root, StringBuilder sb) {
+        if (root == null) {
+            sb.append("null");
+            return;
+        }
+        sb.append(root.val);
+        sb.append(",");
+        preOrder(root.left, sb);
+        sb.append(",");
+        preOrder(root.right, sb);
+    }
+
+    private TreeNode preOrder(int[] index, String[] nodes) {
+        String val = nodes[index[0]];
+        if (val.equals("null")) {
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.parseInt(val));
+        index[0]++;
+        root.left = preOrder(index, nodes);
+        index[0]++;
+        root.right = preOrder(index, nodes);
+        return root;
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize_pre(String data) {
+        if (data.isEmpty()) {
+            return null;
+        }
+        String[] nodes = data.split(",");
+        return preOrder(new int[]{0}, nodes);
+    }
+
+    public String serialize_post(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        postOrder(root, sb);
+        return sb.toString();
+    }
+
+    private void postOrder(TreeNode root, StringBuilder sb) {
+        if (root == null) {
+            sb.append("null");
+            return;
+        }
+
+
+        postOrder(root.left, sb);
+        sb.append(",");
+        postOrder(root.right, sb);
+        sb.append(",");
+        sb.append(root.val);
+    }
+
+    private TreeNode postOrder(int[] index, String[] nodes) {
+        String val = nodes[index[0]];
+        if (val.equals("null")) {
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.valueOf(val));
+        index[0]--;
+        root.right = postOrder(index, nodes);
+        index[0]--;
+        root.left = postOrder(index, nodes);
+
+
+        return root;
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize_post(String data) {
+        if (data.isEmpty()) {
+            return null;
+        }
+        String[] nodes = data.split(",");
+        int n = nodes.length;
+        return postOrder(new int[]{n - 1}, nodes);
     }
 }
