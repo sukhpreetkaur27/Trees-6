@@ -39,10 +39,11 @@ public class SerializeDeserializeBinaryTree {
         Deque<TreeNode> q = new ArrayDeque<>();
         q.offer(root);
         sb.append(root.val);
-        sb.append(",");
+
         while (!q.isEmpty()) {
             int size = q.size();
             for (int i = 0; i < size; i++) {
+                sb.append(",");
                 TreeNode curr = q.poll();
 
                 if (curr.left != null) {
@@ -58,11 +59,9 @@ public class SerializeDeserializeBinaryTree {
                 } else {
                     sb.append("null");
                 }
-                sb.append(",");
             }
         }
 
-        sb.deleteCharAt(sb.length() - 1);
         return sb.toString();
     }
 
